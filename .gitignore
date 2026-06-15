@@ -1,0 +1,17 @@
+﻿# Dataset NASA/JPL — arquivo grande, não versionado
+data/
+
+# Modelo treinado (gerado automaticamente)
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
