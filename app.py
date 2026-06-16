@@ -48,6 +48,30 @@ CLR_BG        = "#0E1117"
 CLR_CARD      = "#1A1D27"
 CLR_BORDER    = "#2E3250"
 
+
+# ---------------------------------------------------------------------------
+# Helpers de formatação pt-BR  (ponto = milhares · vírgula = decimal)
+# ---------------------------------------------------------------------------
+def _fmt_int(n) -> str:
+    """Inteiro com ponto como separador de milhares. Ex: 1.234.567"""
+    return f"{int(n):,}".replace(",", ".")
+
+
+def _fmt_float(n: float, decimals: int = 2) -> str:
+    """Float pt-BR com ponto de milhares e vírgula decimal. Ex: 1.234,56"""
+    if decimals == 0:
+        return _fmt_int(round(n))
+    raw = f"{n:.{decimals}f}"
+    int_part, dec_part = raw.split(".")
+    int_fmt = f"{int(int_part):,}".replace(",", ".")
+    return f"{int_fmt},{dec_part}"
+
+
+def _fmt_pct(n: float, decimals: int = 1) -> str:
+    """Percentual pt-BR. Ex: 87,2%"""
+    return f"{n * 100:.{decimals}f}%".replace(".", ",")
+
+
 # ---------------------------------------------------------------------------
 # Configuração da página
 # ---------------------------------------------------------------------------
@@ -322,28 +346,28 @@ c1, c2, c3, c4 = st.columns(4)
 with c1:
     st.markdown(f"""
     <div class="metric-card">
-        <div class="metric-value" style="color:#7C6FEC">{total_neos:,}</div>
+        <div class="metric-value" style="color:#7C6FEC">{_fmt_int(total_neos)}</div>
         <div class="metric-label">NEOs analisados</div>
     </div>""", unsafe_allow_html=True)
 
 with c2:
     st.markdown(f"""
     <div class="metric-card">
-        <div class="metric-value" style="color:{CLR_PHA}">{n_phas:,}</div>
+        <div class="metric-value" style="color:{CLR_PHA}">{_fmt_int(n_phas)}</div>
         <div class="metric-label">PHAs detectados</div>
     </div>""", unsafe_allow_html=True)
 
 with c3:
     st.markdown(f"""
     <div class="metric-card">
-        <div class="metric-value" style="color:{CLR_SAFE}">{n_safe:,}</div>
+        <div class="metric-value" style="color:{CLR_SAFE}">{_fmt_int(n_safe)}</div>
         <div class="metric-label">Inofensivos</div>
     </div>""", unsafe_allow_html=True)
 
 with c4:
     st.markdown(f"""
     <div class="metric-card">
-        <div class="metric-value" style="color:{CLR_JUNK}">{n_junk:,}</div>
+        <div class="metric-value" style="color:{CLR_JUNK}">{_fmt_int(n_junk)}</div>
         <div class="metric-label">Lixo Espacial</div>
     </div>""", unsafe_allow_html=True)
 
@@ -355,9 +379,9 @@ st.markdown("<br>", unsafe_allow_html=True)
 # ===========================================================================
 
 tab1, tab2, tab3 = st.tabs([
-    "📊 Classificação de NEOs",
-    "🏆 Ranking de PHAs",
-    "🌌 Análise Orbital de PHA",
+    "Classificação de NEOs",
+    "Ranking de PHAs",
+    "Análise Orbital de PHA",
 ])
 
 
@@ -397,7 +421,7 @@ with tab1:
             margin=dict(t=20, b=20, l=20, r=20),
             height=340,
             annotations=[dict(
-                text=f"<b>{total_neos:,}</b><br>NEOs",
+                text=f"<b>{_fmt_int(total_neos)}</b><br>NEOs",
                 x=0.5, y=0.5, showarrow=False,
                 font=dict(size=18, color="#E8EAF0"),
             )],
@@ -498,11 +522,11 @@ with tab2:
 
             display_df = priority_df_with_moid[["rank", "neo_id", "utility_score", "moid_au", "diameter_km", "velocity_kms", "pha_prob"]].copy()
             display_df.columns = ["#", "NEO ID", "Score U", "MOID (AU)", "Diâm. (km)", "Vel. (km/s)", "P(PHA)"]
-            display_df["Score U"] = display_df["Score U"].map("{:.4f}".format)
-            display_df["MOID (AU)"] = display_df["MOID (AU)"].map("{:.4f}".format)
-            display_df["Diâm. (km)"] = display_df["Diâm. (km)"].map("{:.3f}".format)
-            display_df["Vel. (km/s)"] = display_df["Vel. (km/s)"].map("{:.1f}".format)
-            display_df["P(PHA)"] = display_df["P(PHA)"].map("{:.1%}".format)
+            display_df["Score U"] = display_df["Score U"].map(lambda x: _fmt_float(x, 4))
+            display_df["MOID (AU)"] = display_df["MOID (AU)"].map(lambda x: _fmt_float(x, 4))
+            display_df["Diâm. (km)"] = display_df["Diâm. (km)"].map(lambda x: _fmt_float(x, 3))
+            display_df["Vel. (km/s)"] = display_df["Vel. (km/s)"].map(lambda x: _fmt_float(x, 1))
+            display_df["P(PHA)"] = display_df["P(PHA)"].map(lambda x: _fmt_pct(x, 1))
 
             st.dataframe(
                 display_df,
@@ -532,7 +556,7 @@ with tab2:
                     color=top15["color"][::-1].tolist(),
                     line=dict(width=0),
                 ),
-                text=[f"{s:.4f}" for s in top15["utility_score"][::-1]],
+                text=[_fmt_float(s, 4) for s in top15["utility_score"][::-1]],
                 textposition="outside",
                 textfont=dict(color="#E8EAF0", size=11),
                 hovertemplate="<b>%{y}</b><br>Score: %{x:.4f}<extra></extra>",
@@ -616,23 +640,23 @@ with tab3:
         moid_color = CLR_PHA if moid.is_critical else CLR_SAFE
         with m1:
             st.markdown(f"""<div class="metric-card">
-                <div class="metric-value" style="color:{moid_color}">{moid.moid_au:.4f}</div>
+                <div class="metric-value" style="color:{moid_color}">{_fmt_float(moid.moid_au, 4)}</div>
                 <div class="metric-label">MOID (AU)</div>
             </div>""", unsafe_allow_html=True)
         with m2:
             moid_km = moid.moid_au * 1.496e8
             st.markdown(f"""<div class="metric-card">
-                <div class="metric-value" style="color:{CLR_ACCENT}">{moid_km:,.0f}</div>
+                <div class="metric-value" style="color:{CLR_ACCENT}">{_fmt_float(moid_km, 0)}</div>
                 <div class="metric-label">MOID (km)</div>
             </div>""", unsafe_allow_html=True)
         with m3:
             st.markdown(f"""<div class="metric-card">
-                <div class="metric-value" style="color:#FFB347">{dia:.3f}</div>
+                <div class="metric-value" style="color:#FFB347">{_fmt_float(dia, 3)}</div>
                 <div class="metric-label">Diâmetro (km)</div>
             </div>""", unsafe_allow_html=True)
         with m4:
             st.markdown(f"""<div class="metric-card">
-                <div class="metric-value" style="color:{CLR_SAFE}">{vel:.1f}</div>
+                <div class="metric-value" style="color:{CLR_SAFE}">{_fmt_float(vel, 1)}</div>
                 <div class="metric-label">Velocidade (km/s)</div>
             </div>""", unsafe_allow_html=True)
         with m5:
@@ -702,8 +726,8 @@ with tab3:
         with col_info_r:
             pha_prob_val = float(row["pha_prob"])
             st.info(
-                f"**Probabilidade PHA (NB):** {pha_prob_val:.2%}  \n"
-                f"**Score de utilidade:** {float(row['utility_score']):.4f}  \n"
+                f"**Probabilidade PHA (NB):** {_fmt_pct(pha_prob_val, 2)}  \n"
+                f"**Score de utilidade:** {_fmt_float(float(row['utility_score']), 4)}  \n"
                 f"**Rank de prioridade:** #{int(row['rank'])}"
             )
 
@@ -776,7 +800,7 @@ with tab3:
             text=["MOID"],
             textfont=dict(color=moid_color, size=11),
             textposition="top center",
-            name=f"MOID ({moid.moid_au:.4f} AU)",
+            name=f"MOID ({_fmt_float(moid.moid_au, 4)} AU)",
         ))
 
         fig_3d.update_layout(

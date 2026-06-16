@@ -4,7 +4,7 @@
 
 ---
 
-## 📌 Visão Geral
+## Visão Geral
 
 O NEO Tracker AI processa o catálogo orbital da NASA/JPL com mais de 958 mil objetos, aplica um pipeline de IA para identificar asteroides potencialmente perigosos (PHAs) e os prioriza por nível de ameaça, calculando a distância mínima de aproximação à Terra (MOID).
 
@@ -16,7 +16,7 @@ CSV NASA/JPL → Ingestão → Classificação NB → Priorização → Projeç�
 
 ---
 
-## 🧠 Algoritmos e Técnicas
+## Algoritmos e Técnicas
 
 | Módulo | Algoritmo | Descrição |
 |--------|-----------|-----------|
@@ -28,17 +28,17 @@ CSV NASA/JPL → Ingestão → Classificação NB → Priorização → Projeç�
 
 ---
 
-## 🖥️ Interface
+## Interface
 
 Dashboard interativo construído com **Streamlit** e **Plotly**, com 3 abas:
 
-- **📊 Classificação de NEOs** — distribuição de classes, scatter magnitude × diâmetro, histograma de velocidade
-- **🏆 Ranking de PHAs** — tabela de prioridade, gráfico de barras Top-15, scatter de ameaça
-- **🌌 Análise Orbital de PHA** — trajetória 3D interativa (A*), gráfico de distância ao longo do tempo, KPIs de MOID
+- **Classificação de NEOs** — distribuição de classes, scatter magnitude × diâmetro, histograma de velocidade
+- **Ranking de PHAs** — tabela de prioridade, gráfico de barras Top-15, scatter de ameaça
+- **Análise Orbital de PHA** — trajetória 3D interativa (A*), gráfico de distância ao longo do tempo, KPIs de MOID
 
 ---
 
-## 📁 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 n3-neotracker-ai/
@@ -60,7 +60,7 @@ n3-neotracker-ai/
 
 ---
 
-## ⚙️ Instalação
+## Instalação
 
 ### Pré-requisitos
 
@@ -85,7 +85,7 @@ python -m streamlit run app.py
 
 ---
 
-## 🚀 Uso
+## Uso
 
 ### Dashboard (recomendado)
 
@@ -118,7 +118,7 @@ python main.py --sample 10000 --retrain
 
 ---
 
-## 📊 Resultados Típicos
+## Resultados Típicos
 
 Com a configuração padrão (10.000 NEOs amostrados):
 
@@ -131,7 +131,7 @@ Com a configuração padrão (10.000 NEOs amostrados):
 
 ---
 
-## 🔧 Dependências
+## Dependências
 
 ```
 numpy>=1.24.0
@@ -145,7 +145,7 @@ plotly>=5.20.0
 
 ---
 
-## 📚 Referências
+## Referências
 
 - [NASA/JPL Small-Body Database](https://ssd.jpl.nasa.gov/tools/sbdb_query.html)
 - [Dataset Kaggle — Asteroid Dataset](https://www.kaggle.com/datasets/sakhawat18/asteroid-dataset)
@@ -154,6 +154,6 @@ plotly>=5.20.0
 
 ---
 
-## 👩‍💻 Autora
+## Autores
 
-Desenvolvido por **Laura Heloísa Luchez** como projeto da avaliação N3 de Inteligência Artificial — Católica SC, 2026.
+Desenvolvido por **Laura Heloísa Luchez** e **Daniel Fernando Costa Pereira** como projeto da avaliação N3 de Inteligência Artificial, curso de Engenharia de Software — Católica SC, 2026.
