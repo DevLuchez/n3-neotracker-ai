@@ -1,4 +1,4 @@
-# ☄️ NEO Tracker AI
+# ☄️ NEO Tracker AI - v0.1
 
 > Sistema inteligente de detecção, classificação e priorização de **Near-Earth Objects (NEOs)** potencialmente perigosos, desenvolvido como projeto N3 da disciplina de Inteligência Artificial — Engenharia de Software, 7ª Fase.
 
