@@ -8,11 +8,14 @@
 
 O NEO Tracker AI processa o catálogo orbital da NASA/JPL com mais de 958 mil objetos, aplica um pipeline de IA para identificar asteroides potencialmente perigosos (PHAs) e os prioriza por nível de ameaça, calculando a distância mínima de aproximação à Terra (MOID).
 
-### Pipeline de Processamento
+### Fluxo de Pipeline
 
 ```
 CSV NASA/JPL → Ingestão → Classificação NB → Priorização → Projeção A* → MOID
 ```
+<p align="center">
+    <img width="916" height="425" alt="image" src="https://github.com/user-attachments/assets/ce24ded3-58e9-4f6b-a845-8bfc52038f45" />
+</p>
 
 ---
 
